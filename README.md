@@ -87,7 +87,7 @@ npm run build:win
 src/
 ├── index.tsx                 # 入口，按 VITE_ROUTER 选择 HashRouter / BrowserRouter
 ├── app.tsx                   # 路由配置
-├── components/               # 业务组件与 shadcn/ui 基础组件
+├── components/               # 业务组件 + 9 个被引用的 shadcn/ui 基础组件
 ├── pages/                    # 四个业务页面
 │   ├── DebtsPage/            # 负债平台
 │   ├── PlanPage/             # 还款计划
@@ -103,6 +103,13 @@ standalone/
 └── 启动还债管家.bat           # Windows 一键启动脚本
 public/                       # 静态资源
 ```
+
+## 组件裁剪说明
+
+- 仓库只纳入业务代码**实际直接引用**的 9 个 shadcn/ui 基础组件：`button`、`input`、`label`、`badge`、`progress`、`table`、`dialog`、`select`、`sonner`，位于 `src/components/ui/`。
+- 模板自带但本项目未使用的其余 shadcn/ui 组件未纳入仓库；如需新增其他控件，可在工程内按官方文档执行 `npx shadcn add <组件名>` 补装。
+- `select.tsx` 为满足当前「图标类别 / 梯队」两个下拉的精简等价实现，导出 `Select`、`SelectTrigger`、`SelectValue`、`SelectContent`、`SelectItem`，用法与官方组件一致。
+- `package.json` 保留了脚手架的完整依赖清单，未使用的三方包不影响构建，后续可按需精简。
 
 ## 路径别名
 
@@ -123,6 +130,7 @@ import { cn } from "@/lib/utils";
 - 算法目前未强制每笔每月先扣最低还款额；无息借款（如朋友借款）的还款顺序可进一步细化。
 - 暂无账单 Excel/CSV 导入与数据一键导出备份功能。
 - 当前使用 Electron 默认图标，尚未配置自定义应用图标；安装包未做代码签名，首次启动可能触发系统 SmartScreen 提示。
+- `package.json` 中部分三方依赖（图表、轮播、日历等）当前未被业务页面使用，可在精简阶段移除。
 
 ## License
 
